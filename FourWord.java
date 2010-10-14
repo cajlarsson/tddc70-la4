@@ -1,18 +1,39 @@
+
 class FourWord
 {
+   public static void main (String args[])
+   {
+      FourWord hej = new FourWord("abcd");
+      System.out.print(hej.toString());
+   }
 
-   private int value = 0;
+   final char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+			     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
+			     'u', 'v', 'w', 'x', 'y', 'z', 'å', 'ä', 'ö', 'é' };
 
+   final int lookup( char c)
+   {
+      for (int i = 0; i < 30; i++)
+      {
+	 if ( c== alphabet[i])
+	    return i;
+      }
+      return -1;
+   }
+
+   private int value;
+
+   
    public FourWord(String in)
    {
       
       if (in.length() == 4)
       {
-	 byte[] temp = in.getBytes();
+	 char[] temp = in.toCharArray();
 
-	 for(int i= 0; i < 4 ; i++)
+	 for(int i= 1; i < 4 ; i++)
 	 {
-	    value |= temp[i] << i;
+	    value |= ((int) lookup((temp[i])) << (i *5));
 	    	    
 	 }
       }
@@ -20,23 +41,23 @@ class FourWord
    
    public boolean neighbour(FourWord comp)
    {
-      return ((comp.value & 0xFF) == (value & 0xFF))
-	 || ((comp.value & 0xFF00) == (value & 0xFF00))
-	 || ((comp.value & 0xFF0000) == (value & 0xFF0000))
-	 || ((comp.value & 0xFF000000) == (value & 0xFF000000));
+      return ((comp.value & 0xFFFFFF00) == (value & 0xFFFFFF00))
+	 || ((comp.value & 0xFFFF00FF) == (value & 0xFFFF00FF))
+	 || ((comp.value & 0xFF00FFFF) == (value & 0xFF00FFFF))
+	 || ((comp.value & 0x00FFFFFF) == (value & 0x00FFFFFF));
    }
 
    public boolean equal(FourWord comp)
    {
       return comp.value == value;
    }
-
+ 
    public String toString()
    {
-      byte[] tmp = new byte[4];
-      for (int i = 0; i < 4 ; i++)
+      char[] tmp = new char[4];
+      for( int i = 0; i < 4; i++)
       {
-	 tmp[3-i] = (byte)(value >> (3-i)) ;
+	 tmp[i] = alphabet[(value >> (i * 5)& 0x1F)] ;
       }
 
       return new String(tmp);
