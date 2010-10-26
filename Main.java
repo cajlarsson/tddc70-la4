@@ -19,7 +19,9 @@ class Main {
       WordList.MarkAsUsedIfUnused(FourWord.toInt(args[0]));
       LongestChain lc = new LongestChain(4);
       lc.BuildDistanceTable(apan,1);
-      
+      WordRec resultat = lc.Build();
+      resultat.PrintChain();
+      System.out.println(resultat.ChainLength());
       WordList.printCrap();
    }
 }

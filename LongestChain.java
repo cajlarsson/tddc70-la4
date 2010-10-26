@@ -1,19 +1,20 @@
+import java.util.*;
 class LongestChain {
-   private Queue q; // kö som används i breddenförstsökningen
+   public Stack<WordRec> levelStack;
 
    private int goalWord; // slutord i breddenförstsökningen
 
    int wordLength;
 
-   final char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
+    /*   final char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
 			     'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
 			     'x', 'y', 'z', 'å', 'ä', 'ö', 'é' };
-
+    
    int alphabetLength = alphabet.length;
-
+    */
    public LongestChain(int wordLength) {
       this.wordLength = wordLength;
-      q = new Queue();
+      levelStack = new Stack<WordRec>();
    }
 
    // IsGoal kollar om w är slutordet.
@@ -57,49 +58,50 @@ class LongestChain {
       }
       return out;
    }
-   
-   // BreadthFirst utför en breddenförstsökning från startWord för att
-   // hitta kortaste vägen till endWord. Den kortaste vägen returneras
-   // som en kedja av ordposter (WordRec).
-   // Om det inte finns något sätt att komma till endWord returneras null.
-   public WordRec BreadthFirst(int startWord, int  endWord)
-   {
-      // rec = new WordRec(endWord);
-      // rec = MakeSons(rec);
-      return new WordRec(FourWord.toInt("alsa"),null);
-   }
 
    public void BuildDistanceTable(WordRec levelWords, int startDepth)
    {
       if (levelWords == null)
 	 return;
 
+      levelStack.push(levelWords);
+
       WordRec level = new WordRec(levelWords.word, levelWords.father);
+      
       while (level != null)
       {
 	 WordList.setDistance(level.word, startDepth);
 	 level = level.father;
       }
-      BuildDistanceTable(MakeAllSons(levelWords), startDepth +1);
+      WordRec tmp = MakeAllSons(levelWords);
+      
+      BuildDistanceTable(tmp, startDepth + 1);
    }
+
+   public WordRec Build()
+   {
    
-   // CheckAllStartWords hittar den längsta kortaste vägen från något ord
-   // till endWord. Den längsta vägen skrivs ut.
-   public void CheckAllStartWords(int endWord) {
-      int maxChainLength = -1;
-      WordRec maxChainRec = null;
-      for (int i = 0; i < WordList.size; i++) {
-	 WordRec x = BreadthFirst(WordList.WordAt(i), endWord);
-	 if (x != null) {
-	    int len = x.ChainLength();
-	    if (len > maxChainLength) {
-	       maxChainLength = len;
-	       maxChainRec = x;
-	       // x.PrintChain(); // skriv ut den hittills längsta kedjan
-	    }
+      int lastword = levelStack.pop().word;
+      WordRec out = new WordRec(lastword,null);
+      while (!levelStack.empty())
+      {
+	 WordRec tmp = levelStack.pop();
+	 // tmp.PrintChain();
+	 // System.out.println();
+	 // levelStack.peek().PrintChain();
+	 // System.out.println();
+
+	 while (! FourWord.neighbour(tmp.word, lastword))
+	 {
+	    /* if (tmp.father == null)
+	       break;*/
+	    tmp = tmp.father;
 	 }
+
+	 lastword = tmp.word;
+	 out = new WordRec(tmp.word, out);
+	 
       }
-      System.out.println("Längsta ordkedjan har " + maxChainLength + " ord:");
-      maxChainRec.PrintChain();
+      return out;
    }
 }

@@ -47,10 +47,10 @@ abstract class FourWord
    
    public static boolean neighbour(int v1, int v2)
    {
-       return ((v1 & 0x1FFFE0 ) == (v2 & 0x1FFFE0))
-	 || ((v1 & 0x1FFC1F) == (v2 & 0x1FFC1F ))
-	 || ((v1 & 0x1F83FF) == (v2 & 0x1F83FF))
-	 || ((v1 & 0xFFFF) == (v2 & 0xFFFF));
+       return ((v1 & 0xFFFE0 ) == (v2 & 0xFFFE0))
+	 || ((v1 & 0xFFC1F) == (v2 & 0xFFC1F ))
+	 || ((v1 & 0xF83FF) == (v2 & 0xF83FF))
+	 || ((v1 & 0x7FFF) == (v2 & 0x7FFF));
    }
 
    public static String toString(int value)

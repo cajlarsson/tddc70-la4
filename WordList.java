@@ -78,6 +78,6 @@ class WordList {
 	    dist = resultar[i];
 	 }
       }
-      System.out.print( "ord: " + FourWord.toString(word) + " : " + dist);
+      System.out.println( "ord: " + FourWord.toString(word) + " : " + dist);
    }
 }
