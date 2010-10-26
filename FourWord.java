@@ -1,20 +1,49 @@
 abstract class FourWord
 {
-   public static  int toInt(String in)
+   // public static void main(String args[])
+   // {
+   //    String apapapa = "åäö?";
+   //    int apa = toInt( apapapa.toCharArray());
+   //    System.out.print(toString(apa));
+   // }
+   
+   public final static
+   char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+		       'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+		       's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'å',
+		       'ä', 'ö', 'é' };
+   
+   public static  int lookup(char c)
+   {
+      int z = 'z' - 'a';
+      switch (c)
+      {
+	 case 'å': return z + 1;
+	 case 'ä': return z + 2;
+	 case 'ö': return z + 3;
+         case 'é': return z + 4;
+	 default : return c - 'a';
+      }
+   }
+    
+   public static int toInt(char[] in)
    {
       int value = 0;
-      if (in.length() == 4)
-      {
-	 byte[] temp = in.getBytes();
-	 
-	 for(int i= 0; i < 4 ; i++)
-	 {
-	    value |= temp[i] << i;
-	 }
-	 return value;
-      }
-      return 0xFFFFFFFF;
+      value |=  lookup(in[0]);
+      value |=  lookup(in[1]) << 5 ;
+      value |=  lookup(in[2]) << 10;
+      value |=  lookup(in[3]) << 15 ;
+
+      return value;
    }
+   
+   public static int toInt(String in)
+   {
+      return toInt(in.toCharArray());
+   }
+
+   
+   
    
    public static boolean neighbour(int v1, int v2)
    {
